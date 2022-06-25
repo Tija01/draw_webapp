@@ -1,0 +1,32 @@
+<!-- This homepage will contain the user drawings -->
+{% extends "layout.html" %}
+
+{% block title %}
+    My drawings
+{% endblock %}
+
+{% block main %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th class="text-start">Name</th>
+            <th class="text-end">Thumbnail</th>
+            <th class="text-end">Date</th>
+            <th class="text-end">Size</th>
+        </tr>
+    </thead>
+
+   <tbody>
+            {% for drawing in drawings %}
+            <tr>
+                <td class="text-start">{{drawing.name}}</td>
+                <td> 
+                    <img src="{{drawing.thumbnail}}" class="img-thumbnail" alt="Drawing thumbnail">  
+                </td>
+                <td class="text-end">{{drawing.date}}</td>
+                <td class="text-end">{{drawing.size}}</td>
+            </tr>
+            {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

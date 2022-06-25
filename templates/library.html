@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Library
+{% endblock %}
+
+{% block main %}
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th class="text-start">Name</th>
+                <th class="text-end">User</th>
+                <th class="text-end">Thumbnail</th>
+                <th class="text-end">Date</th>
+                <th class="text-end">Size</th>
+            </tr>
+        </thead>
+       <tbody>
+                {% for drawing in library %}
+                <tr>
+                    <td class="text-start">{{drawing.name}}</td>
+                    <td class="text-end">{{drawing.user}}</td>
+                    <td> 
+                        <img src="{{drawing.thumbnail}}" class="img-thumbnail" alt="drawing thumbnail">  
+                    </td>
+                    <td class="text-end">{{drawing.date}}</td>
+                    <td class="text-end">{{drawing.size}}</td>
+                </tr>
+                {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

@@ -1,6 +1,7 @@
 import os
 
-#from cs50 import SQL Read SQLalchemy documentation to not use this library, add the alternative to requirements.txt
+from sqlalchemy import create_engine, text
+
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
@@ -20,8 +21,8 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-# Configure CS50 Library to use SQLite database
-db = SQL("sqlite:///draw.db")
+# Configure SQLalchemy to use SQLite database
+engine = create_engine("sqlite+pysqlite:///draw.db", echo=True, future=True)
 
 @app.after_request
 def after_request(response):
@@ -37,8 +38,16 @@ def after_request(response):
 def index():
     """Show user drawings"""
 
-    # Query database for user stock drawings
-    drawings = db.execute("SELECT  FROM drawingss WHERE   ", session["user_id"])
+    # Query database for user stock drawings 
+    drawings = [] # List of dictionnaries used by Jinja that wil contain each drawing data
+
+    with engine.connect() as conn:
+        result = conn.execute(
+            text("SELECT * FROM library WHERE user_id = :user_id"),
+            {"user_id" : session["user_id"]}
+            )
+        for row in result:
+            drawings.append({"name" : row.name, "link" : row.link, "time_stamp ": row.time_stamp})
 
     return render_template("index.html", drawings=drawings)
 
@@ -52,11 +61,11 @@ def draw():
         if not request.form.get("symbol"):
             return apology("must provide a symbol", 403)
         '''
-        # Insert the drawing informations into the DB
+        # Insert the drawing informations into the DB TODO
         now = datetime.now()
         dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
-        transaction_id = db.execute("INSERT INTO transactions (user_id, symbol, shares, price, time_stamp) VALUES (?, ?, ?, ?, ?)",
-                                    session["user_id"], response["symbol"], int(request.form.get("shares")), response["price"], dt_string)
+       # transaction_id = db.execute("INSERT INTO transactions (user_id, symbol, shares, price, time_stamp) VALUES (?, ?, ?, ?, ?)",
+        #                            session["user_id"], response["symbol"], int(request.form.get("shares")), response["price"], dt_string)
 
         return redirect("/")
 
@@ -69,10 +78,19 @@ def draw():
 def library():
     """Show all published drawings"""
 
-    # Query database for all drawings
-    librart = db.execute("SELECT symbol, shares, price, time_stamp FROM transactions WHERE user_id=?", session["user_id"])
+    # Query database for all drawings TODO
+    #library = db.execute("SELECT symbol, shares, price, time_stamp FROM transactions WHERE user_id=?", session["user_id"])
+    drawings= []
+    with engine.connect() as conn:
+        result = conn.execute(
+        text("SELECT * FROM library"),
+            {"user_id" : session["user_id"]}
+            )
+        for row in result:
+            drawings.append({"name" : row.name, "user" : row.user_id, 
+                "link" : row.link, "time_stamp ": row.time_stamp})
 
-    return render_template("library.html", user_history=user_history)
+    return render_template("library.html", drawings=drawings)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -94,14 +112,25 @@ def login():
             return apology("must provide password", 403)
 
         # Query database for username
-        rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
+        #rows = db.execute("SELECT * FROM users WHERE username = ?", request.form.get("username"))
+        with engine.connect() as conn:
+            result = conn.execute(
+                text("SELECT * FROM users WHERE username = :username"),
+                {"username" : request.form.get("username")}
+            )
+            counter = 0
+            for row in result:
+                counter += 1
+                password_hash = row.hash         
+            if counter == 0 or not check_password_hash(password_hash, request.form.get("password")):
+                return apology("account inexistant or wrong password")
 
         # Ensure username exists and password is correct
-        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
+        if len(result) != 1 or not check_password_hash(result[0].hash, request.form.get("password")):
             return apology("invalid username and/or password", 403)
 
         # Remember which user has logged in
-        session["user_id"] = rows[0]["id"]
+        session["user_id"] = result[0].id
 
         # Redirect user to home page
         return redirect("/")
@@ -148,15 +177,35 @@ def register():
             return apology("both passwords entered must match", 400)
 
         # Query database for username
-        rows = db.execute("SELECT username FROM users WHERE username = ?", request.form.get("username"))
+        #rows = db.execute("SELECT username FROM users WHERE username = ?", request.form.get("username"))
+        with engine.connect() as conn:
+            result = conn.execute(
+                text("SELECT username FROM users WHERE username = :username"),
+                {"username" : request.form.get("username")}
+            )
+            # Ensure username does not already exist
+            counter = 0
+            for row in result:
+                counter += 1         
+            if counter > 0:
+                return apology("provided username is taken")
+        
 
-        # Ensure username does not already exist
-        if len(rows) != 0:
-            return apology("provided username is taken")
-
-        # Generate password hash and insert it to the database, remembering his id
+        # Generate password hash and insert it to the database, remembering his id 
         password_hash = generate_password_hash(request.form.get("password"))
-        username_id = db.execute("INSERT INTO users (username, hash) VALUES (?, ?)", request.form.get("username"), password_hash)
+        #username_id = db.execute("INSERT INTO users (username, hash) VALUES (?, ?)", request.form.get("username"), password_hash)
+        with engine.connect() as conn:
+            conn.execute(
+                text("INSERT INTO users (username, hash) VALUES (:username, :hash)"),
+                {"username": request.form.get("username"), "hash": password_hash }
+                )
+            conn.commit()
+            result = conn.execute(
+                text("SELECT username FROM users WHERE username = :username"),
+                {"username" : request.form.get("username")}
+            )
+            for row in result:
+                username_id = row.username
 
         # log user and keep him logged in
         session["user_id"] = username_id

@@ -16,15 +16,14 @@
             </tr>
         </thead>
        <tbody>
-                {% for drawing in library %}
+                {% for drawing in drawings %}
                 <tr>
                     <td class="text-start">{{drawing.name}}</td>
                     <td class="text-end">{{drawing.user}}</td>
                     <td> 
-                        <img src="{{drawing.thumbnail}}" class="img-thumbnail" alt="drawing thumbnail">  
+                        <img src="{{drawing.link}}" class="img-thumbnail" alt="drawing thumbnail">  
                     </td>
-                    <td class="text-end">{{drawing.date}}</td>
-                    <td class="text-end">{{drawing.size}}</td>
+                    <td class="text-end">{{drawing.time_stamp}}</td>
                 </tr>
                 {% endfor %}
         </tbody>

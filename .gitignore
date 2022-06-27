@@ -9,3 +9,6 @@ __pycache__/
 
 # ignore session info
 flask_session/
+
+# ignore images
+images/

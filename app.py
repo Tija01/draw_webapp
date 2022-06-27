@@ -121,16 +121,13 @@ def login():
             counter = 0
             for row in result:
                 counter += 1
+                user_id = row.id
                 password_hash = row.hash         
             if counter == 0 or not check_password_hash(password_hash, request.form.get("password")):
                 return apology("account inexistant or wrong password")
 
-        # Ensure username exists and password is correct
-        if len(result) != 1 or not check_password_hash(result[0].hash, request.form.get("password")):
-            return apology("invalid username and/or password", 403)
-
         # Remember which user has logged in
-        session["user_id"] = result[0].id
+        session["user_id"] = user_id
 
         # Redirect user to home page
         return redirect("/")

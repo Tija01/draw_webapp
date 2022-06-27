@@ -8,6 +8,7 @@
 {% block main %}
 <!-- TODO: Add the drawing feature and it's tutorial-->
     <canvas id="myCanvas" width="200" height="100"></canvas>
+    <img class="invisible" src="" id="imgConverted" >
 
     <hr>
     <h2 class="text-start"> Resize canvas</h2>
@@ -22,7 +23,7 @@
         </div>
 
         <div class="col">
-            <button onclick="resize(event)" class="btn btn-light">Resize</button>
+            <button onclick="resize(event)" class="btn btn-dark">Resize</button>
         </div>
     </div>
 
@@ -53,36 +54,25 @@
     </div>
 
     <div class="col-3 ms-auto mt-2">
-        <button onclick="line(event)" class="btn btn-light">Draw line</button>
+        <button onclick="line(event)" class="btn btn-dark">Draw line</button>
     </div>
+
+    <hr>
+    <h2 class="text-start text-center">Save to library</h2>
+    <button id="save" onclick="save(event)" class="btn btn-primary col-2">Save</button>
 
 
     <script> 
-        const canvas = document.getElementById("myCanvas")
+        var canvas = document.getElementById("myCanvas")
         var ctx = canvas.getContext("2d");
         // Default bg-color
         setCanvasBgColor(canvas, 'white');
 
-        function setCanvasBgColor(canvas, color) 
-        {
-            const context = canvas.getContext('2d');
 
-            // Its good practice to save a context state that will be modified
-            context.save()
-            // To keep the existing drawing as the bg color is changed
-            context.globalCompositeOperation = 'destination-over'
-            
-            context.fillStyle = color;
-            context.fillRect(0, 0, canvas.width, canvas.height);
-
-            context.restore()
-        }
-        
-        
         function resize(event)
         {
             var select = document.getElementById('size');
-            var option = select.options[select.selectedIndex];
+            var option = select.options[select.selectedIndex];           
 
             if (option.value == "small")
             {                
@@ -102,6 +92,22 @@
                 canvas.height = 2480;
             }
         }
+        
+
+        function setCanvasBgColor(canvas, color) 
+        {
+            // Its good practice to save a context state that will be modified
+            ctx.save()
+
+            // To keep the existing drawing as the bg color is changed
+            ctx.globalCompositeOperation = 'destination-over'
+            
+            ctx.fillStyle = color;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.restore()
+        }
+        
 
         function line(event)
         {
@@ -112,6 +118,27 @@
             ctx.moveTo(x1/100*canvas.width, y1/100*canvas.height);
             ctx.lineTo(x2/100*canvas.width, y2/100*canvas.height);
             ctx.stroke();
+        }
+
+        function save(event)
+        {
+            //Convert the canvas to blob and post the file
+            canvas.toBlob(postFile, 'image/jpeg');
+            
+            //Add file blob to a form and post
+            function postFile(file) {
+                let formdata = new FormData();
+                formdata.append("image", file);
+                let xhr = new XMLHttpRequest();
+                xhr.open('POST', 'http://127.0.0.1:5000/image', true);
+                xhr.onload = function () {
+                if (this.status === 200)
+                    console.log(this.response);
+                else
+                    console.error(xhr);
+                };
+                xhr.send(formdata);
+            }
         }
 
     </script>

@@ -1,14 +1,14 @@
 import os
-
 from sqlalchemy import create_engine, text
-
-from flask import Flask, flash, redirect, render_template, request, session
+from flask import Flask, flash, redirect, render_template, request, session, Response
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
-
+import time
 from helpers import apology, login_required
+
+PATH_TO_TEST_IMAGES_DIR = './images'
 
 # Configure application
 app = Flask(__name__)
@@ -212,3 +212,13 @@ def register():
 
     else:
         return render_template("register.html")
+
+# Save drawing as a jpeg file then TODO add url to the database
+@app.route('/image', methods=['POST'])
+def image():
+
+    i = request.files['image']  # get the image
+    f = ('%s.jpeg' % time.strftime("%Y%m%d-%H%M%S"))
+    i.save('%s/%s' % (PATH_TO_TEST_IMAGES_DIR, f))
+
+    return redirect("/")

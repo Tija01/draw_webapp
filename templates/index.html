@@ -6,23 +6,23 @@
 {% endblock %}
 
 {% block main %}
+<h1 class="text-start mb-5">Your drawings:</h1>
+
 <table class="table table-striped">
     <thead>
         <tr>
-            <th class="text-start">Name</th>
-            <th class="text-end">Thumbnail</th>
-            <th class="text-end">Date</th>
+            <th class="text-center">Thumbnail</th>
+            <th class="text-center">Date&Time</th>
         </tr>
     </thead>
 
    <tbody>
             {% for drawing in drawings %}
             <tr>
-                <td class="text-start">{{drawing.name}}</td>
                 <td> 
-                    <img src="{{drawing.link}}" class="img-thumbnail" alt="Drawing thumbnail">  
+                    <img src="{{url_for('static', filename=drawing.link)}}" class="img-thumbnail" alt="Thumbnail" style="max-width:20%">
                 </td>
-                <td class="text-end">{{drawing.time_stamp}}</td>
+                <td class="text-center">{{drawing.time_stamp}}</td>
             </tr>
             {% endfor %}
     </tbody>

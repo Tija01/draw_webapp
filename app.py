@@ -8,7 +8,7 @@ from datetime import datetime
 import time
 from helpers import apology, login_required
 
-PATH_TO_TEST_IMAGES_DIR = './images'
+PATH_TO_TEST_IMAGES_DIR = './static/images'
 
 # Configure application
 app = Flask(__name__)
@@ -47,7 +47,7 @@ def index():
             {"user_id" : session["user_id"]}
             )
         for row in result:
-            drawings.append({"name" : row.name, "link" : row.link, "time_stamp ": row.time_stamp})
+            drawings.append({"link" : row.link, "time_stamp": row.time_stamp})
 
     return render_template("index.html", drawings=drawings)
 
@@ -78,17 +78,15 @@ def draw():
 def library():
     """Show all published drawings"""
 
-    # Query database for all drawings TODO
-    #library = db.execute("SELECT symbol, shares, price, time_stamp FROM transactions WHERE user_id=?", session["user_id"])
+    # Query database for all drawings
     drawings= []
     with engine.connect() as conn:
         result = conn.execute(
-        text("SELECT * FROM library"),
-            {"user_id" : session["user_id"]}
+        text("SELECT * FROM library")
             )
         for row in result:
-            drawings.append({"name" : row.name, "user" : row.user_id, 
-                "link" : row.link, "time_stamp ": row.time_stamp})
+            drawings.append({"user" : row.user_id, 
+                "link" : row.link, "time_stamp": row.time_stamp})
 
     return render_template("library.html", drawings=drawings)
 
@@ -216,9 +214,18 @@ def register():
 # Save drawing as a jpeg file then TODO add url to the database
 @app.route('/image', methods=['POST'])
 def image():
-
+    # Save drawings as jpg at ./images
     i = request.files['image']  # get the image
     f = ('%s.jpeg' % time.strftime("%Y%m%d-%H%M%S"))
     i.save('%s/%s' % (PATH_TO_TEST_IMAGES_DIR, f))
+    
+    link = "images/" + str(f)
+    # Add images url to the database
+    with engine.connect() as conn:
+        conn.execute(
+            text("INSERT INTO library (user_id, link, time_stamp) VALUES (:user_id, :link, :time_stamp)"),
+            {"user_id": session["user_id"], "link": link, 
+            "time_stamp": str(time.strftime("%Y%m%d-%H%M%S"))})
+        conn.commit()
 
     return redirect("/")

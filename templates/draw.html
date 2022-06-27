@@ -7,4 +7,55 @@
 
 {% block main %}
 <!-- TODO: Add the drawing feature and it's tutorial-->
+    <canvas id="myCanvas" width="200" height="100"></canvas>
+
+    <hr>
+    <h2 class="text-start"> Resize canvas</h2>
+    <div class="row">
+        <div class="col">
+            <select id="size" class="form-select" aria-label="Resize select">
+                <option selected>Choose canvas size</option>
+                <option value="small">Small</option>
+                <option value="medium">Medium</option>
+                <option value="A4">A4 - landscape</option>
+            </select>
+        </div>
+
+        <div class="col">
+            <button onclick="resize(event)" class="btn btn-light">Resize</button>
+        </div>
+    </div>
+
+    <script> 
+        var canvas = document.getElementById("myCanvas")
+        var ctx = canvas.getContext("2d");
+        
+        function resize(event)
+        {
+            var select = document.getElementById('size');
+            var option = select.options[select.selectedIndex];
+
+            if (option.value == "small")
+            {
+                 
+                canvas.width = 200;
+                canvas.height = 100;
+            }
+            
+            if (option.value == "medium")
+            {
+                var canvas = document.getElementById("myCanvas");  
+                canvas.width = 800;
+                canvas.height = 400;
+            }
+
+            if (option.value == "A4")
+            {
+                var canvas = document.getElementById("myCanvas");  
+                canvas.width = 3508;
+                canvas.height = 2480;
+            }
+        }
+
+    </script>
 {% endblock %}

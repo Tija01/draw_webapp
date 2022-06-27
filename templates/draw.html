@@ -58,8 +58,26 @@
 
 
     <script> 
-        var canvas = document.getElementById("myCanvas")
+        const canvas = document.getElementById("myCanvas")
         var ctx = canvas.getContext("2d");
+        // Default bg-color
+        setCanvasBgColor(canvas, 'white');
+
+        function setCanvasBgColor(canvas, color) 
+        {
+            const context = canvas.getContext('2d');
+
+            // Its good practice to save a context state that will be modified
+            context.save()
+            // To keep the existing drawing as the bg color is changed
+            context.globalCompositeOperation = 'destination-over'
+            
+            context.fillStyle = color;
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            context.restore()
+        }
+        
         
         function resize(event)
         {

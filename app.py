@@ -213,7 +213,9 @@ def register():
 
 # Save drawing as a jpeg file then TODO add url to the database
 @app.route('/image', methods=['POST'])
+@login_required
 def image():
+    '''Save image file in the server and insert the link to the database'''
     # Save drawings as jpg at ./images
     i = request.files['image']  # get the image
     f = ('%s.jpeg' % time.strftime("%Y%m%d-%H%M%S"))

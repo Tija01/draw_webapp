@@ -128,6 +128,8 @@
             
             //Add file blob to a form and post
             function postFile(file) {
+                if (confirm("The drawing will be saved to your homepage and the public library"))
+                {
                 let formdata = new FormData();
                 formdata.append("image", file);
                 let xhr = new XMLHttpRequest();
@@ -139,6 +141,7 @@
                     console.error(xhr);
                 };
                 xhr.send(formdata);
+                }
             }
         }
 

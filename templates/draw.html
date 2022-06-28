@@ -58,6 +58,49 @@
     </div>
 
     <hr>
+    <h2 class="text-start">Draw a rectangle</h2>
+    <div class="row">
+        <div class="col">
+            <h3>First point: </h3>  
+        </div>
+        <div class="col">
+            <input id="x1_rect" autocomplete="off" class="form-control mx-auto w-auto" min="0" max="100" name="x1" placeholder="x1 [%]" type="number">
+        </div>
+        <div class="col">
+            <input id="y1_rect" autocomplete="off" class="form-control mx-auto w-auto" min="0" max="100" name="y1" placeholder="y1 [%]" type="number">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <h3>Second point: </h3>
+        </div>
+        <div class="col">
+            <input id="x2_rect" autocomplete="off" class="form-control mx-auto w-auto" min="0" max="100" name="x2" placeholder="x2 [%]" type="number">
+        </div>
+        <div class="col">
+            <input id="y2_rect" autocomplete="off" class="form-control mx-auto w-auto" min="0" max="100" name="y2" placeholder="y2 [%]" type="number">
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col">
+            <h3>Fill: </h3>
+        </div>
+
+        <div class="col">
+            <div class="form-check text-center">
+                <input class="form-check-input" type="checkbox" name="fill_rect" id="fill_rect">
+            </div>    
+        </div>
+
+        <div class="col ms-auto">
+            <button onclick="rect(event)" class="btn btn-dark">Draw rectangle</button>
+        </div>
+    </div>
+
+
+    <hr>
     <h2 class="text-start text-center">Save to library</h2>
     <button id="save" onclick="save(event)" class="btn btn-primary col-2">Save</button>
 
@@ -67,6 +110,22 @@
         var ctx = canvas.getContext("2d");
         // Default bg-color
         setCanvasBgColor(canvas, 'white');
+        ctx.fillStyle = "black";
+
+
+        function setCanvasBgColor(canvas, color) 
+        {
+            // Its good practice to save a context state that will be modified
+            ctx.save()
+
+            // To keep the existing drawing as the bg color is changed
+            ctx.globalCompositeOperation = 'destination-over'
+            
+            ctx.fillStyle = color;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.restore()
+        }
 
 
         function resize(event)
@@ -94,22 +153,7 @@
             setCanvasBgColor(canvas, 'white');
         }
         
-
-        function setCanvasBgColor(canvas, color) 
-        {
-            // Its good practice to save a context state that will be modified
-            ctx.save()
-
-            // To keep the existing drawing as the bg color is changed
-            ctx.globalCompositeOperation = 'destination-over'
-            
-            ctx.fillStyle = color;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.restore()
-        }
         
-
         function line(event)
         {
             var x1 = document.getElementById('x1').value;
@@ -120,6 +164,27 @@
             ctx.lineTo(x2/100*canvas.width, y2/100*canvas.height);
             ctx.stroke();
         }
+
+        function rect(event)
+        {
+            var x1 = document.getElementById('x1_rect').value;
+            var y1 = document.getElementById('y1_rect').value;
+            var x2 = document.getElementById('x2_rect').value;
+            var y2 = document.getElementById('y2_rect').value;
+   
+            if(document.getElementById('fill_rect').checked) 
+                {
+                    ctx.fillRect(x1/100*canvas.width, y1/100*canvas.height, x2/100*canvas.width, y2/100*canvas.height)
+                    ctx.stroke();
+                }
+            else
+            {
+                ctx.beginPath();            
+                ctx.rect(x1/100*canvas.width, y1/100*canvas.height, x2/100*canvas.width, y2/100*canvas.height);
+                ctx.stroke();
+            }
+        }
+
 
         function save(event)
         {

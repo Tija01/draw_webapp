@@ -82,10 +82,10 @@ def library():
     drawings= []
     with engine.connect() as conn:
         result = conn.execute(
-        text("SELECT * FROM library")
+        text("SELECT username, link, time_stamp FROM users AS U, library AS L WHERE U.id = L.user_id")
             )
         for row in result:
-            drawings.append({"user" : row.user_id, 
+            drawings.append({"user" : row.username, 
                 "link" : row.link, "time_stamp": row.time_stamp})
 
     return render_template("library.html", drawings=drawings)

@@ -7,8 +7,9 @@
 
 {% block main %}
 <!-- TODO: Add the drawing feature and it's tutorial-->
-    <canvas id="myCanvas" width="200" height="100"></canvas>
+    <canvas id="myCanvas" width="200" height="100">Your browser does not support the HTML canvas tag.</canvas>
     <img class="invisible" src="" id="imgConverted" >
+
 
     <hr>
     <h2 class="text-start"> Resize canvas</h2>
@@ -26,6 +27,7 @@
             <button onclick="resize(event)" class="btn btn-dark">Resize</button>
         </div>
     </div>
+
 
     <hr>
     <h2 class="text-start">Draw a line</h2>
@@ -96,6 +98,58 @@
 
         <div class="col ms-auto">
             <button onclick="rect(event)" class="btn btn-dark">Draw rectangle</button>
+        </div>
+    </div>
+
+
+    <hr>
+    <h2 class="text-start">Draw an arc</h2>
+    <div class="row">
+        <div class="col">
+            <h3>Center: </h3>  
+        </div>
+        <div class="col">
+            <input id="x_arc" autocomplete="off" class="form-control mx-auto w-auto" min="0" max="100" name="x_arc" placeholder="x [%]" type="number">
+        </div>
+        <div class="col">
+            <input id="y_arc" autocomplete="off" class="form-control mx-auto w-auto" min="0" max="100" name="y_arc" placeholder="y [%]" type="number">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <h3>Angle: </h3>  
+        </div>
+        <div class="col">
+            <input id="ang_start" autocomplete="off" class="form-control mx-auto w-auto" min="0" max="360" name="ang_start" placeholder="start [°]" type="number">
+        </div>
+        <div class="col">
+            <input id="ang_end" autocomplete="off" class="form-control mx-auto w-auto" min="0" max="360" name="ang_end" placeholder="end [°]" type="number">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-4 text-center">
+            <h3>Radius: </h3>
+        </div>
+        <div class="col-8 text-end">
+            <input id="r_arc" autocomplete="off" class="form-control mx-auto w-auto" min="0" max="50" name="r_arc" placeholder="r [%]" type="number">
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col">
+            <h3>Counter-clockwise: </h3>
+        </div>
+
+        <div class="col">
+            <div class="form-check text-center">
+                <input class="form-check-input" type="checkbox" name="counter_clock" id="counter_clock">
+            </div>    
+        </div>
+
+        <div class="col ms-auto">
+            <button onclick="arc(event)" class="btn btn-dark">Draw arc</button>
         </div>
     </div>
 
@@ -183,6 +237,21 @@
                 ctx.rect(x1/100*canvas.width, y1/100*canvas.height, x2/100*canvas.width, y2/100*canvas.height);
                 ctx.stroke();
             }
+        }
+
+
+        function arc(event)
+        {
+            var x = document.getElementById('x_arc').value / 100 * canvas.width;
+            var y = document.getElementById('y_arc').value / 100 * canvas.height;
+            var r = document.getElementById('r_arc').value / 100 * canvas.width;
+            var ang_start = document.getElementById('ang_start').value / 360 * 2 * Math.PI;
+            var ang_end = document.getElementById('ang_end').value / 360 * 2 * Math.PI;
+            var counter_clock = document.getElementById('counter_clock').checked
+
+            ctx.beginPath();
+            ctx.arc(x, y, r, ang_start, ang_end, counter_clock);
+            ctx.stroke();
         }
 
 

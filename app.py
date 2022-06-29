@@ -47,7 +47,7 @@ def index():
             {"user_id" : session["user_id"]}
             )
         for row in result:
-            drawings.append({"link" : row.link, "time_stamp": row.time_stamp})
+            drawings.append({"id": row.id, "link" : row.link, "time_stamp": row.time_stamp})
 
     return render_template("index.html", drawings=drawings)
 

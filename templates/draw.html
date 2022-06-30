@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block main %}
-<!-- TODO: Add the drawing feature and it's tutorial-->
+<!-- TODO: Add the drawing feature-->
     <canvas id="myCanvas" width="200" height="100">Your browser does not support the HTML canvas tag.</canvas>
     <img class="invisible" src="" id="imgConverted" >
 
@@ -27,6 +27,62 @@
             <button onclick="resize(event)" class="btn btn-dark">Resize</button>
         </div>
     </div>
+
+
+    <hr>
+    <h2 class="text-start">Customize style</h2>
+    <div class="row">
+        <div class="col">
+            <h3>Background color: </h3>  
+        </div>
+        <div class="col">
+            <select id="bg-color" class="form-select" aria-label="bg-color select">
+                <option selected>Choose canvas color</option>
+                <option value="White">White</option>
+                <option value="Turquoise">Turquoise</option>
+                <option value="Violet">Violet</option>
+            </select>
+        </div>
+        <div class="col">
+            <h3>Fill color: </h3>  
+        </div>
+        <div class="col">
+            <select id="fill-color" class="form-select" aria-label="fill-colorselect">
+                <option selected>Choose fill color</option>
+                <option value="Black">Black</option>
+                <option value="Red">Red</option>
+                <option value="Yellow">Yellow</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <h3>Stroke color:</h3>  
+        </div>
+        <div class="col">
+            <select id="stroke-color" class="form-select" aria-label="stroke-color select">
+                <option selected>Choose stroke color</option>
+                <option value="Black">Black</option>
+                <option value="Red">Red</option>
+                <option value="White">White</option>
+            </select>
+        </div>
+
+        <div class="col">
+            <h3>Stroke width:</h3>  
+        </div>
+        <div class="col">
+            <input id="stroke-width" autocomplete="off" class="form-control mx-auto w-auto" min="1" max="30" name="stroke-width" placeholder="[pixel]" type="number">
+        </div>
+    </div>
+
+        <div class="row">
+            <div class="col text-end mt-3">
+                <button onclick="customize(event)" class="btn btn-dark">Customize</button>
+            </div>
+        </div>    
+   
 
 
     <hr>
@@ -160,9 +216,9 @@
 
 
     <script> 
-        var canvas = document.getElementById("myCanvas")
+        var canvas = document.getElementById("myCanvas");
         var ctx = canvas.getContext("2d");
-        // Default bg-color
+        // Default style
         setCanvasBgColor(canvas, 'white');
         ctx.fillStyle = "black";
 
@@ -170,15 +226,15 @@
         function setCanvasBgColor(canvas, color) 
         {
             // Its good practice to save a context state that will be modified
-            ctx.save()
+            ctx.save();
 
             // To keep the existing drawing as the bg color is changed
-            ctx.globalCompositeOperation = 'destination-over'
+            ctx.globalCompositeOperation = 'destination-over';
             
             ctx.fillStyle = color;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            ctx.restore()
+            ctx.restore();
         }
 
 
@@ -205,6 +261,26 @@
                 canvas.height = 2480;
             }
             setCanvasBgColor(canvas, 'white');
+        }
+
+        function customize(event)
+        {
+            // Change canvas color
+            var bgcolor = document.getElementById("bg-color").value;
+            ctx.fillStyle = bgcolor;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Change fill color
+            var fill_color = document.getElementById("fill-color").value;
+            ctx.fillStyle = fill_color;
+
+            // Change stroke color
+            var stroke_color = document.getElementById('stroke-color').value;
+            ctx.strokeStyle = stroke_color;
+
+            // Change stroke width
+            var stroke_width = document.getElementById('stroke-width').value
+            ctx.lineWidth = stroke_width;  
         }
         
         

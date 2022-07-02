@@ -125,7 +125,7 @@ function save(event)
         let formdata = new FormData();
         formdata.append("image", file);
         let xhr = new XMLHttpRequest();
-        xhr.open('POST', 'http://127.0.0.1:5000/image', true);
+        xhr.open('POST', 'image', true);
         xhr.onload = function () {
         if (this.status === 200)
             console.log(this.response);

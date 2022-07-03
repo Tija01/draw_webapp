@@ -8,7 +8,7 @@ from datetime import datetime
 import time
 from helpers import apology, login_required
 
-PATH_TO_TEST_IMAGES_DIR = './static/images'
+PATH_TO_IMAGES_DIR = 'https://draw-webapp.herokuapp.com/static/images/'
 
 # Configure application
 app = Flask(__name__)
@@ -219,9 +219,9 @@ def image():
     # Save drawings as jpg at ./images
     i = request.files['image']  # get the image
     f = ('%s.jpeg' % time.strftime("%Y%m%d-%H%M%S"))
-    i.save('%s/%s' % (PATH_TO_TEST_IMAGES_DIR, f))
+    i.save('%s/%s' % (PATH_TO_IMAGES_DIR, f))
     
-    link = "https://draw-webapp.herokuapp.com/images/" + str(f)
+    link = "https://draw-webapp.herokuapp.com/static/images/" + str(f)
     # Add images url to the database
     with engine.connect() as conn:
         conn.execute(

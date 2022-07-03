@@ -11,4 +11,4 @@ __pycache__/
 flask_session/
 
 # ignore images
-images/
+#images/

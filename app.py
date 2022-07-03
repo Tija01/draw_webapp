@@ -221,7 +221,7 @@ def image():
     f = ('%s.jpeg' % time.strftime("%Y%m%d-%H%M%S"))
     i.save('%s/%s' % (PATH_TO_TEST_IMAGES_DIR, f))
     
-    link = "images/" + str(f)
+    link = "https://draw-webapp.herokuapp.com/images/" + str(f)
     # Add images url to the database
     with engine.connect() as conn:
         conn.execute(

@@ -79,7 +79,6 @@ SQLAlchemy==1.4.39
 ssh-import-id==5.11
 systemd-python==234
 Twisted==22.1.0
-ubuntu-advantage-tools==27.9
 ufw==0.36.1
 unattended-upgrades==0.1
 urllib3==1.26.5

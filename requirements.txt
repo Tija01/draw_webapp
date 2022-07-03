@@ -19,7 +19,6 @@ docutils==0.17.1
 feedparser==6.0.8
 Flask==2.1.2
 Flask-Session==0.4.0
-gitsome==0.8.0
 greenlet==1.1.2
 gunicorn==20.1.0
 httplib2==0.20.2

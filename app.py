@@ -8,7 +8,8 @@ from datetime import datetime
 import time
 from helpers import apology, login_required
 
-PATH_TO_IMAGES_DIR = '/static/images'
+#PATH_TO_IMAGES_DIR = '/static/images'
+MYDIR = os.path.dirname(__file__)
 
 # Configure application
 app = Flask(__name__)
@@ -216,10 +217,12 @@ def register():
 @login_required
 def image():
     '''Save image file in the server and insert the link to the database'''
+    
     # Save drawings as jpg at ./images
     i = request.files['image']  # get the image
     f = ('%s.jpeg' % time.strftime("%Y%m%d-%H%M%S"))
-    i.save('%s/%s' % (PATH_TO_IMAGES_DIR, f))
+    # i.save('%s/%s' % (PATH_TO_IMAGES_DIR, f))
+    i.save(os.path.join(MYDIR, 'static/images/', f))
     
     link = "/static/images/" + str(f)
     # Add images url to the database

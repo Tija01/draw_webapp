@@ -222,9 +222,9 @@ def image():
     i = request.files['image']  # get the image
     f = ('%s.jpeg' % time.strftime("%Y%m%d-%H%M%S"))
     # i.save('%s/%s' % (PATH_TO_IMAGES_DIR, f))
-    i.save(os.path.join(MYDIR, '/static/images/', f))
+    i.save(os.path.join(MYDIR, 'images/', f))
     
-    link = "/static/images/" + str(f)
+    link = "images/" + str(f)
     # Add images url to the database
     with engine.connect() as conn:
         conn.execute(

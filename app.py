@@ -8,7 +8,7 @@ from datetime import datetime
 import time
 from helpers import apology, login_required
 
-PATH_TO_IMAGES_DIR = 'https://draw-webapp.herokuapp.com/static/images/'
+PATH_TO_IMAGES_DIR = 'https://draw-webapp.herokuapp.com/static/images'
 
 # Configure application
 app = Flask(__name__)

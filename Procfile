@@ -1,1 +1,1 @@
-web: gunicorn draw-webapp:app
+web: gunicorn app:app

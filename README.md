@@ -99,6 +99,7 @@ This section should list any major frameworks/libraries used to bootstrap the pr
 * [Flask](https://flask.palletsprojects.com/en/2.1.x/)
 * [Bootstrap](https://getbootstrap.com)
 * [SQLalchemy](https://www.sqlalchemy.org/)
+* [Jinja](https://jinja.palletsprojects.com/en/3.1.x/)
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>

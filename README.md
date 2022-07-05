@@ -142,7 +142,9 @@ _Below is an example of how you can install and set up your app to run on a loca
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Demo video url: TODO
+Demo video url: https://youtu.be/NYi68YbjjfE
+
+Please find the presentation pdf file in this directory
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
